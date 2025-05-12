@@ -1,0 +1,90 @@
+﻿## ASP.NET Core / .NET
+bin/
+obj/
+*.user
+*.rsuser
+*.suo
+*.cache
+*.log
+*.vspscc
+*.vssscc
+
+## Visual Studio
+.vscode/
+.vs/
+*.dbmdl
+*.bak
+*.orig
+
+## ASP.NET runtime files
+project.lock.json
+project.fragment.lock.json
+artifacts/
+*.pdb
+
+## NuGet
+*.nupkg
+*.snupkg
+.nuget/
+packages/
+*.nuspec
+
+## Build results
+*.dll
+*.exe
+*.app
+*.appx
+*.msi
+*.msm
+*.msp
+
+## Configuration files
+appsettings.*.json
+secrets.json
+*.launchSettings.json
+
+## Publish
+publish/
+out/
+wwwroot/lib/
+node_modules/
+
+## Logs
+*.log
+
+## Rider (JetBrains)
+.idea/
+*.sln.iml
+
+## ReSharper
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.DotSettings.user
+
+## Anaconda / Python (на випадок, якщо є інтеграція або скрипти)
+.anaconda/
+**/.anaconda/
+**/anaconda3/
+**/Miniconda3/
+**/.conda/
+__pycache__/
+*.py[cod]
+*.ipynb
+.ipynb_checkpoints/
+
+## System
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+*.stackdump
+.DS_Store
+*.swp
+*.tmp
+
+## Windows User Paths (ігноруються тільки якщо в межах проєкту)
+**/AppData/
+**/AppData/Local/Temp/
+**/AppData/Roaming/
+**/C:/Users/*/.anaconda/
+**/C:/Users/*/anaconda3/
+**/C:/Users/*/Miniconda3/
