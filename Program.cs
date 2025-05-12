@@ -5,6 +5,50 @@ using Microsoft.EntityFrameworkCore.SqlServer;
 using TaskManager.Models;
 using Microsoft.AspNetCore.Identity;
 
+async Task SeedRolesAndAdminAsync(IServiceProvider serviceProvider)
+{
+    var roleManager = serviceProvider.GetRequiredService<RoleManager<Role>>();
+    var userManager = serviceProvider.GetRequiredService<UserManager<User>>();
+
+    string[] roleNames = { "Admin", "User" };
+
+    foreach (var roleName in roleNames)
+    {
+        if (!await roleManager.RoleExistsAsync(roleName))
+        {
+            await roleManager.CreateAsync(new Role
+            {
+                Name = roleName,
+                NormalizedName = roleName.ToUpper()
+            });
+        }
+    }
+
+
+    string adminEmail = "admin@example.com";
+    string adminPassword = "Admin123!";
+
+    var existingAdmin = await userManager.FindByEmailAsync(adminEmail);
+    if (existingAdmin == null)
+    {
+        var adminUser = new User
+        {
+            FullName = "Адміністратор",
+            Email = adminEmail,
+            UserName = adminEmail,
+            NormalizedEmail = adminEmail.ToUpper(),
+            NormalizedUserName = adminEmail.ToUpper(),
+            EmailConfirmed = true
+        };
+
+        var result = await userManager.CreateAsync(adminUser, adminPassword);
+        if (result.Succeeded)
+        {
+            await userManager.AddToRoleAsync(adminUser, "Admin");
+        }
+    }
+}
+
 var builder = WebApplication.CreateBuilder(args);
 
 
@@ -55,5 +99,11 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    await SeedRolesAndAdminAsync(services);
+}
 
 app.Run();

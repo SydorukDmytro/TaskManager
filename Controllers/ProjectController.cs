@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using TaskManager.dto;
+using TaskManager.Models;
 using TaskManager.Services;
 
 namespace TaskManager.Controllers
@@ -9,16 +11,25 @@ namespace TaskManager.Controllers
     public class ProjectController : Controller
     {
         private readonly IProjectService _service;
+        private readonly UserManager<User> userManager;
 
-        public ProjectController(IProjectService service)
+        public ProjectController(IProjectService service, UserManager<User> _userManager)
         {
+            userManager = _userManager;
             _service = service;
         }
 
         public async Task<IActionResult> Index()
         {
-            var result = await _service.GetAllProjectsAsync();
-            return View(result);
+            var user = await userManager.GetUserAsync(User);
+            var projects = await _service.GetAllProjectsAsync();
+            if(User.IsInRole("Admin"))
+            {
+                return View(projects);
+            }
+
+            var filtered = projects.Where(p => p.CreatedByUserId == user.Id).ToList();
+            return View(filtered);
         }
 
         public async Task<IActionResult> Details(int id)
@@ -33,14 +44,26 @@ namespace TaskManager.Controllers
         public async Task<IActionResult> Create(ProjectDto dto)
         {
             if (!ModelState.IsValid) return View(dto);
+            var user = await userManager.GetUserAsync(User);
+            dto.CreatedByUserId = user.Id;
+            
             await _service.CreateProjectAsync(dto);
             return RedirectToAction(nameof(Index));
         }
 
         public async Task<IActionResult> Edit(int id)
         {
+            var user = await userManager.GetUserAsync(User);
             var project = await _service.GetProjectByIdAsync(id);
-            return project is null ? NotFound() : View(project);
+            if(user.Id == project.CreatedByUserId || User.IsInRole("Admin"))
+            {
+                ViewBag.User = user;
+                return View(project);
+            }
+            else
+            {
+                return Forbid();
+            }
         }
 
         [HttpPost]
@@ -54,6 +77,9 @@ namespace TaskManager.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             var project = await _service.GetProjectByIdAsync(id);
+            var user = await userManager.GetUserAsync(User);
+            if (project == null || (project.CreatedByUserId != user.Id && !User.IsInRole("Admin")))
+                return Forbid();
             return project is null ? NotFound() : View(project);
         }
 

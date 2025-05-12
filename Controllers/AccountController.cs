@@ -21,10 +21,10 @@ namespace TaskManager.Controllers
         public async Task<IActionResult> Login(LoginViewModel model)
         {
             if (!ModelState.IsValid) return View(model);
-            var user = userManager.FindByEmailAsync(model.Email);
+            var user = await userManager.FindByEmailAsync(model.Email);
             if (user != null)
             {
-                var result = await signInManager.PasswordSignInAsync(user.Result, model.Password, false, false);
+                var result = await signInManager.PasswordSignInAsync(user, model.Password, false, false);
                 if (result.Succeeded) return RedirectToAction("Index", "Home");
             }
             ModelState.AddModelError("", "Невірний логін або пароль");
@@ -37,19 +37,29 @@ namespace TaskManager.Controllers
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
             if (!ModelState.IsValid) return View(model);
-            var user = new User { UserName = model.Email, Email = model.Email, FullName = model.FullName };
+
+            var user = new User
+            {
+                FullName = model.FullName,
+                Email = model.Email,
+                UserName = model.Email,
+                NormalizedEmail = model.Email.ToUpper(),
+                NormalizedUserName = model.Email.ToUpper(),
+                EmailConfirmed = true
+            };
+
             var result = await userManager.CreateAsync(user, model.Password);
 
             if (result.Succeeded)
             {
+                await userManager.AddToRoleAsync(user, "User");
                 await signInManager.SignInAsync(user, false);
                 return RedirectToAction("Index", "Home");
             }
 
-            foreach(var errors in result.Errors)
-            {
-                ModelState.AddModelError("", errors.Description);
-            }
+            foreach (var error in result.Errors)
+                ModelState.AddModelError("", error.Description);
+
             return View(model);
         }
 

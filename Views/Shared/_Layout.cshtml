@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -25,14 +30,36 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Project" asp-action="Index">Проєкти</a>
+                            </li>
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-controller="User" asp-action="Index">Користувачі</a>
+                                </li>
+                            }
+                        }
+
                         @if(User.Identity.IsAuthenticated)
                         {
-                            <span>@User.Identity.Name</span>
-                            <a asp-controller="Account" asp-action="Logout">Вийти</a>
+                            <li class="nav-item">
+                                 <a class="nav-link text-dark" asp-controller="" asp-action="">@User.Identity.Name</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Account" asp-action="Logout">Вийти</a>
+                            </li>
                         }
                         else
                         {
-                            <a asp-controller="Account" asp-action="Login">Увійти</a>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Account" asp-action="Login">Увійти</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Account" asp-action="Register">Зареєструватися</a>
+                            </li>
                         }
                     </ul>
                 </div>
