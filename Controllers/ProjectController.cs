@@ -86,6 +86,10 @@ namespace TaskManager.Controllers
         [HttpPost, ActionName("Delete")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            var project = await _service.GetProjectByIdAsync(id);
+            var user = await userManager.GetUserAsync(User);
+            if (project == null || (project.CreatedByUserId != user.Id && !User.IsInRole("Admin")))
+                return Forbid();
             var success = await _service.DeleteProjectAsync(id);
             return success ? RedirectToAction(nameof(Index)) : NotFound();
         }

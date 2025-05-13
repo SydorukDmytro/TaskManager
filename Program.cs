@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore.SqlServer;
 using TaskManager.Models;
 using Microsoft.AspNetCore.Identity;
+using TaskManager.Services;
 
 async Task SeedRolesAndAdminAsync(IServiceProvider serviceProvider)
 {
@@ -57,6 +58,8 @@ builder.Services.AddControllersWithViews();
 // Додаємо DbContext з рядком підключення
 builder.Services.AddDbContext<TaskManagerContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.AddIdentity<User, Role>(options =>
 {

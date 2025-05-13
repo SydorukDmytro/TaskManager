@@ -1,4 +1,5 @@
-﻿using TaskManager.Models;
+﻿using Microsoft.AspNetCore.Identity;
+using TaskManager.Models;
 
 namespace TaskManager.dto
 {
@@ -73,6 +74,17 @@ namespace TaskManager.dto
                 Email = user.Email,
                 RoleId = user.RoleId,
                 RoleName = user.Role?.Name
+            };
+        }
+
+        public static User ToEntity(this UserDto dto)
+        {
+            return new User
+            {
+                Id = dto.Id,
+                FullName = dto.FullName,
+                Email = dto.Email,
+                RoleId = dto.RoleId
             };
         }
 
