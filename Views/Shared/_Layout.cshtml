@@ -64,7 +64,7 @@
                         @if (User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark">@User.Identity.Name</a>
+                                @await Component.InvokeAsync("UserName")
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-controller="Account" asp-action="Logout">Вийти</a>
