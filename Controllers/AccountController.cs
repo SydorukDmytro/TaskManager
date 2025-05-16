@@ -63,6 +63,20 @@ namespace TaskManager.Controllers
             return View(model);
         }
 
+        public async Task<IActionResult> Profile()
+        {
+            var user = await userManager.GetUserAsync(User);
+            var role = await userManager.GetRolesAsync(user);
+            var model = new UserWithRolesViewModel
+            {
+                Id = user.Id,
+                FullName = user.FullName,
+                Email = user.Email,
+                RoleName = role.FirstOrDefault()
+            };
+            return View(model);
+        }
+
         public async Task<IActionResult> Logout()
         {
             await signInManager.SignOutAsync();
