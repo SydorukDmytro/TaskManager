@@ -60,6 +60,7 @@ builder.Services.AddDbContext<TaskManagerContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IProjectService, ProjectService>();
 
 builder.Services.AddIdentity<User, Role>(options =>
 {

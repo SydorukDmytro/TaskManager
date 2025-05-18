@@ -1,0 +1,33 @@
+﻿@using TaskManager.dto
+@model ProjectDto
+@{
+    ViewData["Title"] = "Підтвердження видалення";
+}
+
+<div class="container py-5 bg-dark text-light min-vh-100">
+    <div class="card bg-secondary text-white shadow-lg">
+        <div class="card-body">
+            <h2 class="card-title text-danger mb-4">Видалити проєкт?</h2>
+
+            <p class="fs-5"><strong>Назва:</strong> @Model.Title</p>
+            <p class="fs-5"><strong>Опис:</strong> @Model.Description</p>
+            <p><small class="text-light">Дата створення: @Model.CreatedAt.ToString("yyyy-MM-dd")</small></p>
+            <p><small class="text-light">Автор: @Model.CreatedByUserName</small></p>
+
+            <hr class="border-light" />
+
+            <form asp-action="DeleteConfirmed" method="post">
+                <input type="hidden" asp-for="Id" />
+
+                <div class="d-flex gap-3">
+                    <button type="submit" class="btn btn-danger">
+                        <i class="bi bi-trash"></i> Підтвердити видалення
+                    </button>
+                    <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-outline-light">
+                        Скасувати
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

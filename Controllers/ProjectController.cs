@@ -35,7 +35,12 @@ namespace TaskManager.Controllers
         public async Task<IActionResult> Details(int id)
         {
             var result = await _service.GetProjectByIdAsync(id);
-            return result is null ? NotFound() : View(result);
+            var user = await userManager.GetUserAsync(User);
+            if (result.CreatedByUserId == user.Id || User.IsInRole("Admin"))
+            {
+                return View(result);
+            }
+            return NotFound();
         }
 
         public IActionResult Create() => View();
@@ -57,8 +62,17 @@ namespace TaskManager.Controllers
             var project = await _service.GetProjectByIdAsync(id);
             if(user.Id == project.CreatedByUserId || User.IsInRole("Admin"))
             {
+                var model = new ProjectDto
+                {
+                    Id = project.Id,
+                    Title = project.Title,
+                    Description = project.Description,
+                    CreatedAt = project.CreatedAt,
+                    CreatedByUserId = project.CreatedByUserId,
+                    CreatedByUserName = project.CreatedByUserName
+                };
                 ViewBag.User = user;
-                return View(project);
+                return View(model);
             }
             else
             {
@@ -83,7 +97,7 @@ namespace TaskManager.Controllers
             return project is null ? NotFound() : View(project);
         }
 
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var project = await _service.GetProjectByIdAsync(id);

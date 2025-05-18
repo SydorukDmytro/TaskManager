@@ -9,19 +9,19 @@
 <table class="table">
     <thead>
         <tr>
-            <th>Full Name</th>
-            <th>Email</th>
-            <th>Role</th>
-            <th>Actions</th>
+            <th class="text-light">Full Name</th>
+            <th class="text-light">Email</th>
+            <th class="text-light">Role</th>
+            <th class="text-light">Actions</th>
         </tr>
     </thead>
     <tbody>
         @foreach(var user in Model)
         {
             <tr>
-                <td>@user.FullName</td>
-                <td>@user.Email</td>
-                <td>@user.RoleName</td>
+                <td class="text-light">@user.FullName</td>
+                <td class="text-light">@user.Email</td>
+                <td class="text-light">@user.RoleName</td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@user.Id" class="btn btn-primary btn-sm">Edit</a>
                     <a asp-action="Details" asp-route-id="@user.Id" class="btn btn-secondary btn-sm">Details</a>
