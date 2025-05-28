@@ -12,7 +12,7 @@ using TaskManager.Data;
 namespace TaskManager.Migrations
 {
     [DbContext(typeof(TaskManagerContext))]
-    [Migration("20250511221036_InitialCreate")]
+    [Migration("20250519224812_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -198,6 +198,9 @@ namespace TaskManager.Migrations
                     b.Property<int?>("AssignedUserId")
                         .HasColumnType("int");
 
+                    b.Property<int>("CreatedByUserId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -223,6 +226,8 @@ namespace TaskManager.Migrations
                     b.HasKey("TaskId");
 
                     b.HasIndex("AssignedUserId");
+
+                    b.HasIndex("CreatedByUserId");
 
                     b.HasIndex("ProjectId");
 
@@ -456,6 +461,12 @@ namespace TaskManager.Migrations
                         .HasForeignKey("AssignedUserId")
                         .OnDelete(DeleteBehavior.Restrict);
 
+                    b.HasOne("TaskManager.Models.User", "CreatedByUser")
+                        .WithMany()
+                        .HasForeignKey("CreatedByUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("TaskManager.Models.Project", "Project")
                         .WithMany("Tasks")
                         .HasForeignKey("ProjectId")
@@ -463,6 +474,8 @@ namespace TaskManager.Migrations
                         .IsRequired();
 
                     b.Navigation("AssignedUser");
+
+                    b.Navigation("CreatedByUser");
 
                     b.Navigation("Project");
                 });

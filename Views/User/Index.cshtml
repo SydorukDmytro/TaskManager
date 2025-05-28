@@ -1,18 +1,18 @@
 ﻿@model List<UserWithRolesViewModel>
 
 @{
-    ViewData["Title"] = "Users";
+    ViewData["Title"] = "Користувачі";
 }
 
-<h2>Users</h2>
+<h2>Користувачі</h2>
 
 <table class="table">
     <thead>
         <tr>
-            <th class="text-light">Full Name</th>
+            <th class="text-light">Повне ім'я</th>
             <th class="text-light">Email</th>
-            <th class="text-light">Role</th>
-            <th class="text-light">Actions</th>
+            <th class="text-light">Роль</th>
+            <th class="text-light">Дії</th>
         </tr>
     </thead>
     <tbody>
@@ -23,8 +23,8 @@
                 <td class="text-light">@user.Email</td>
                 <td class="text-light">@user.RoleName</td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@user.Id" class="btn btn-primary btn-sm">Edit</a>
-                    <a asp-action="Details" asp-route-id="@user.Id" class="btn btn-secondary btn-sm">Details</a>
+                    <a asp-action="Edit" asp-route-id="@user.Id" class="btn btn-primary btn-sm">Змінити</a>
+                    <a asp-action="Details" asp-route-id="@user.Id" class="btn btn-secondary btn-sm">Деталі</a>
                 </td>
             </tr>
         }

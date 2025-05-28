@@ -213,7 +213,8 @@ namespace TaskManager.Migrations
                     Priority = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DueDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     ProjectId = table.Column<int>(type: "int", nullable: false),
-                    AssignedUserId = table.Column<int>(type: "int", nullable: true)
+                    AssignedUserId = table.Column<int>(type: "int", nullable: true),
+                    CreatedByUserId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -224,6 +225,12 @@ namespace TaskManager.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Tasks_AspNetUsers_CreatedByUserId",
+                        column: x => x.CreatedByUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Tasks_Projects_ProjectId",
                         column: x => x.ProjectId,
@@ -347,6 +354,11 @@ namespace TaskManager.Migrations
                 name: "IX_Tasks_AssignedUserId",
                 table: "Tasks",
                 column: "AssignedUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tasks_CreatedByUserId",
+                table: "Tasks",
+                column: "CreatedByUserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Tasks_ProjectId",

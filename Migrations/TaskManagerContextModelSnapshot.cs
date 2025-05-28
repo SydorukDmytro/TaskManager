@@ -195,6 +195,9 @@ namespace TaskManager.Migrations
                     b.Property<int?>("AssignedUserId")
                         .HasColumnType("int");
 
+                    b.Property<int>("CreatedByUserId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -220,6 +223,8 @@ namespace TaskManager.Migrations
                     b.HasKey("TaskId");
 
                     b.HasIndex("AssignedUserId");
+
+                    b.HasIndex("CreatedByUserId");
 
                     b.HasIndex("ProjectId");
 
@@ -254,20 +259,6 @@ namespace TaskManager.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Admin",
-                            NormalizedName = "ADMIN"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "User",
-                            NormalizedName = "USER"
-                        });
                 });
 
             modelBuilder.Entity("TaskManager.Models.Tag", b =>
@@ -377,42 +368,6 @@ namespace TaskManager.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUsers", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "9cc4e16c-f5dc-49ad-8470-5299c40f21ac",
-                            Email = "admin@example.com",
-                            EmailConfirmed = false,
-                            FullName = "Адміністратор",
-                            LockoutEnabled = false,
-                            NormalizedEmail = "ADMIN@EXAMPLE.COM",
-                            NormalizedUserName = "ADMIN",
-                            PasswordHash = "HASHED_PASSWORD",
-                            PhoneNumberConfirmed = false,
-                            RoleId = 1,
-                            TwoFactorEnabled = false,
-                            UserName = "admin"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "7dafcfd9-85ed-4cfc-a40b-a9ea7e3a7a7c",
-                            Email = "user@example.com",
-                            EmailConfirmed = false,
-                            FullName = "Користувач",
-                            LockoutEnabled = false,
-                            NormalizedEmail = "USER@EXAMPLE.COM",
-                            NormalizedUserName = "USER",
-                            PasswordHash = "HASHED_PASSWORD",
-                            PhoneNumberConfirmed = false,
-                            RoleId = 2,
-                            TwoFactorEnabled = false,
-                            UserName = "user"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
@@ -503,6 +458,12 @@ namespace TaskManager.Migrations
                         .HasForeignKey("AssignedUserId")
                         .OnDelete(DeleteBehavior.Restrict);
 
+                    b.HasOne("TaskManager.Models.User", "CreatedByUser")
+                        .WithMany()
+                        .HasForeignKey("CreatedByUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("TaskManager.Models.Project", "Project")
                         .WithMany("Tasks")
                         .HasForeignKey("ProjectId")
@@ -510,6 +471,8 @@ namespace TaskManager.Migrations
                         .IsRequired();
 
                     b.Navigation("AssignedUser");
+
+                    b.Navigation("CreatedByUser");
 
                     b.Navigation("Project");
                 });

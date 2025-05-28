@@ -24,6 +24,8 @@ namespace TaskManager.Services
         public async Task<TaskDto?> GetTaskByIdAsync(int id)
         {
             var task = await _context.Tasks
+                .Include(t => t.AssignedUser)
+                .Include(t => t.CreatedByUser)
                 .Include(t => t.TaskTags)
                 .FirstOrDefaultAsync(t => t.TaskId == id);
             return task?.ToDto();
@@ -45,7 +47,6 @@ namespace TaskManager.Services
             task.Title = dto.Title;
             task.Description = dto.Description;
             task.Status = dto.Status;
-            task.Priority = dto.Priority;
             task.DueDate = dto.DueDate;
             task.AssignedUserId = dto.AssignedUserId;
 
@@ -69,6 +70,17 @@ namespace TaskManager.Services
                 .Include(t => t.TaskTags)
                 .ToListAsync();
             return tasks.Select(t => t.ToDto());
+        }
+
+        public async Task<bool> UpdateTaskStatusAsync(int id, string status)
+        {
+            var task = await _context.Tasks.FindAsync(id);
+            if (task == null) return false;
+
+            task.Status = status;
+            _context.Tasks.Update(task);
+            await _context.SaveChangesAsync();
+            return true;
         }
     }
 }

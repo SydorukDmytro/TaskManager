@@ -1,8 +1,33 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Головна";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container mt-5">
+    <div class="text-center">
+        <h1 class="display-4 mb-3">Ласкаво просимо до <span class="text-primary">Workverse</span></h1>
+        <p class="lead mb-4 text-muted">
+            Ефективно керуйте проєктами, задачами та командою в одному місці.
+        </p>
+        <div class="d-flex justify-content-center gap-3 flex-wrap">
+            <a class="btn btn-primary btn-lg px-4" asp-controller="Account" asp-action="Login">Увійти</a>
+            <a class="btn btn-outline-secondary btn-lg px-4" asp-controller="Account" asp-action="Register">Зареєструватися</a>
+        </div>
+    </div>
+
+    <hr class="my-5" />
+
+    <div class="row text-center">
+        <div class="col-md-4 mb-4">
+            <h3>📋 Задачі</h3>
+            <p>Створюйте, відслідковуйте та оновлюйте завдання в реальному часі.</p>
+        </div>
+        <div class="col-md-4 mb-4">
+            <h3>👥 Командна робота</h3>
+            <p>Співпрацюйте з колегами та делегуйте задачі зручно та швидко.</p>
+        </div>
+        <div class="col-md-4 mb-4">
+            <h3>📈 Прогрес</h3>
+            <p>Аналізуйте хід виконання завдань і досягайте цілей швидше.</p>
+        </div>
+    </div>
 </div>

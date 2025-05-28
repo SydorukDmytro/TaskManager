@@ -61,6 +61,7 @@ builder.Services.AddDbContext<TaskManagerContext>(options =>
 
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IProjectService, ProjectService>();
+builder.Services.AddScoped<ITaskService, TaskService>();
 
 builder.Services.AddIdentity<User, Role>(options =>
 {

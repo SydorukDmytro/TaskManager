@@ -36,10 +36,12 @@ namespace TaskManager.Controllers
         {
             var result = await _service.GetProjectByIdAsync(id);
             var user = await userManager.GetUserAsync(User);
+
             if (result.CreatedByUserId == user.Id || User.IsInRole("Admin"))
             {
                 return View(result);
             }
+
             return NotFound();
         }
 

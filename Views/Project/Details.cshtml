@@ -4,41 +4,113 @@
 @inject UserManager<User> UserManager
 
 @{
-    ViewData["Title"] = "Project Details";
+    ViewData["Title"] = "Деталі проєкту";
     var isAdmin = User.IsInRole("Admin");
     var userId = UserManager.GetUserId(User);
+    var statuses = new[] { "ToDo", "InProgress", "Done" };
+}
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const containers = document.querySelectorAll(".task-column");
+            containers.forEach(column => {
+                new Sortable(column, {
+                    group: "tasks",
+                    animation: 150,
+                    onEnd: function (evt) {
+                        const taskId = evt.item.dataset.taskId;
+                        const newStatus = evt.to.dataset.status;
+
+                        fetch(`/Task/UpdateStatus/${taskId}?newStatus=${newStatus}`, {
+                            method: "POST"
+                        }).then(r => {
+                            if (!r.ok) alert("Помилка при оновленні статусу");
+                        });
+                    }
+                });
+            });
+        });
+    </script>
 }
 
 <div class="container py-5 bg-dark text-light min-vh-100">
     <div class="mb-4 d-flex justify-content-between align-items-center">
         <h1 class="display-4">@Model.Title</h1>
-        <a asp-action="CreateTask" asp-route-projectId="@Model.Id" class="btn btn-success btn-lg">
-            + Створити завдання
-        </a>
+        <a asp-action="Index" class="btn btn-outline-light btn-lg">Назад до списку</a>
     </div>
 
-    <div class="card bg-secondary text-white shadow-lg">
+    <div class="card bg-secondary text-white shadow-lg mb-5">
         <div class="card-body">
             <h5 class="card-subtitle mb-3 text-light">
-                Проєкт створено: @Model.CreatedAt.ToString("yyyy-MM-dd") &nbsp;|&nbsp; Автор: @Model.CreatedByUserName
+                Проєкт створено: @Model.CreatedAt.ToString("yyyy-MM-dd") | Автор: @Model.CreatedByUserName
             </h5>
             <p class="card-text fs-5">@Model.Description</p>
 
-            <hr class="border-light" />
-
-            <div class="d-flex justify-content-start gap-3">
-                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning"
-                   style="display: @(Model.CreatedByUserId.ToString() == userId || isAdmin ? "inline-block" : "none")">
-                    Редагувати
-                </a>
-                <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger"
-                   style="display: @(Model.CreatedByUserId.ToString() == userId || isAdmin ? "inline-block" : "none")">
-                    Видалити
-                </a>
-                <a asp-action="Index" class="btn btn-outline-light">
-                    Назад до списку
-                </a>
+            <div class="d-flex gap-3 mt-3">
+                @if (Model.CreatedByUserId.ToString() == userId || isAdmin)
+                {
+                    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Редагувати</a>
+                    <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">Видалити</a>
+                }
             </div>
         </div>
     </div>
+
+    <div class="row">
+        @foreach (var status in statuses)
+        {
+            <div class="col-md-4">
+                <div class="card bg-secondary text-white mb-4">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h4 class="mb-0">@status</h4>
+                        <!-- Кнопка для відкриття форми -->
+                        <button class="btn btn-sm btn-success" onclick="toggleForm('@status')">+</button>
+                    </div>
+                    <div class="card-body task-column" data-status="@status" style="min-height: 300px;">
+                        @foreach (var task in Model.Tasks.Where(t => t.Status == status))
+                        {
+                            <div class="card bg-dark text-white mb-2 p-2" data-task-id="@task.Id">
+                                <div class="d-flex justify-content-between">
+                                    <h5 class="card-title">@task.Title</h5>
+                                    <div>
+                                        <a asp-controller="Task" asp-action="Edit" asp-route-id="@task.Id" class="btn btn-sm btn-warning">✏</a>
+                                        <form asp-controller="Task" asp-action="Delete" asp-route-id="@task.Id" method="post" class="d-inline">
+                                            <button type="submit" class="btn btn-sm btn-danger">🗑</button>
+                                        </form>
+                                    </div>
+                                </div>
+                                <p class="card-text">@task.Description</p>
+                                <p class="card-text"><strong>Термін:</strong><span>@(task.DueDate.HasValue ? task.DueDate.Value.ToString("dd.MM.yyyy") : "Не вказано")</span></p>
+                                <p class="card-text"><small>Виконавець: @task.AssignedUserName</small></p>
+                            </div>
+                        }
+                    </div>
+
+                    <!-- Форма створення нової задачі -->
+                    <div class="card-footer d-none" id="form-@status">
+                        <form asp-controller="Task" asp-action="CreateInColumn" method="post">
+                            <input type="hidden" name="ProjectId" value="@Model.Id" />
+                            <input type="hidden" name="Status" value="@status" />
+                            <input type="hidden" name="CreatedByUserId" value="@UserManager.GetUserId(User)" />
+                            <input type="hidden" name="AssignedUserId" value="@UserManager.GetUserId(User)" />
+                            <div class="form-group">
+                                <input type="text" name="Title" class="form-control mb-2" placeholder="Назва задачі" required />
+                                <textarea name="Description" class="form-control mb-2" placeholder="Опис"></textarea>
+                                <button type="submit" class="btn btn-sm btn-primary">Створити</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
 </div>
+
+<script>
+    function toggleForm(status) {
+        const form = document.getElementById(`form-${status}`);
+        form.classList.toggle("d-none");
+    }
+</script>

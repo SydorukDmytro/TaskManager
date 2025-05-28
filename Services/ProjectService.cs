@@ -21,8 +21,36 @@ namespace TaskManager.Services
 
         public async Task<ProjectDto?> GetProjectByIdAsync(int id)
         {
-            var project = await _context.Projects.Include(p => p.Creator).FirstOrDefaultAsync(p => p.ProjectId == id);
-            return project?.ToDto();
+            var project = await _context.Projects
+                .Include(p => p.Tasks)
+                .ThenInclude(t => t.AssignedUser)
+                .Include(p => p.Tasks)
+                .ThenInclude(t => t.CreatedByUser) 
+                .Include(p => p.Creator) 
+                .FirstOrDefaultAsync(p => p.ProjectId == id);
+
+            if (project == null) return null;
+
+            return new ProjectDto
+            {
+                Id = project.ProjectId,
+                Title = project.Title,
+                Description = project.Description,
+                CreatedAt = project.CreatedAt,
+                CreatedByUserId = project.CreatedByUserId,
+                CreatedByUserName = project.Creator?.UserName,
+                Tasks = project.Tasks.Select(t => new TaskDto
+                {
+                    Id = t.TaskId,
+                    Title = t.Title,
+                    Description = t.Description,
+                    DueDate = t.DueDate,
+                    Status = t.Status,
+                    AssignedUserId = t.AssignedUserId,
+                    AssignedUserName = t.AssignedUser?.UserName,
+                    CreatedByUserId = t.CreatedByUserId
+                }).ToList()
+            };
         }
 
         public async Task<ProjectDto> CreateProjectAsync(ProjectDto dto)

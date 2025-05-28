@@ -9,5 +9,6 @@ namespace TaskManager.Services
         Task<TaskDto> CreateTaskAsync(TaskDto dto);
         Task<bool> UpdateTaskAsync(TaskDto dto);
         Task<bool> DeleteTaskAsync(int id);
+        Task<bool> UpdateTaskStatusAsync(int id, string status);
     }
 }

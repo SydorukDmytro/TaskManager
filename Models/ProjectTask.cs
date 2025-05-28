@@ -17,6 +17,9 @@ namespace TaskManager.Models
         public int? AssignedUserId { get; set; }
         public virtual User AssignedUser { get; set; }
 
+        public int CreatedByUserId { get; set; }
+        public virtual User CreatedByUser { get; set; }
+
         public virtual ICollection<Comment> Comments { get; set; }
         public virtual ICollection<TaskTag> TaskTags { get; set; }
     }

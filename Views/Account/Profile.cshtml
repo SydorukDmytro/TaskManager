@@ -3,30 +3,98 @@
     ViewData["Title"] = "Профіль";
 }
 
+<!-- Підключення шрифтів -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Poppins:wght@500;700&display=swap" rel="stylesheet">
+
+<style>
+    body {
+        font-family: 'Inter', sans-serif;
+    }
+
+    .profile-card {
+        font-family: 'Poppins', sans-serif;
+        border-radius: 1.5rem;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+    }
+
+    .profile-header {
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        color: #fff;
+        padding: 2rem 1.5rem;
+        text-align: center;
+    }
+
+        .profile-header h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0;
+        }
+
+    .profile-body {
+        padding: 2rem;
+        background-color: #f9fafb;
+    }
+
+    .profile-label {
+        font-weight: 600;
+        font-size: 0.9rem;
+        color: #6b7280;
+        margin-bottom: 0.25rem;
+    }
+
+    .profile-value {
+        font-size: 1.2rem;
+        color: #111827;
+        margin-bottom: 1.5rem;
+    }
+
+    .profile-footer {
+        background-color: #f1f5f9;
+        padding: 1.5rem;
+        text-align: center;
+    }
+
+    .btn-primary-custom {
+        background-color: #6366f1;
+        border: none;
+        font-weight: 600;
+        padding: 0.6rem 1.5rem;
+        border-radius: 0.75rem;
+        transition: all 0.2s ease-in-out;
+    }
+
+        .btn-primary-custom:hover {
+            background-color: #4f46e5;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(79, 70, 229, 0.3);
+        }
+</style>
+
 <div class="container mt-5">
     <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card shadow-lg border-0 rounded-4">
-                <div class="card-header bg-primary text-white text-center rounded-top-4">
-                    <h3 class="mb-0">Ваш профіль</h3>
+        <div class="col-md-8 col-lg-6">
+            <div class="profile-card">
+                <div class="profile-header">
+                    <h2>👤 Ваш профіль</h2>
                 </div>
-                <div class="card-body">
-                    <div class="mb-3">
-                        <label class="form-label fw-bold text-dark">Повне ім’я:</label>
-                        <div class="form-control-plaintext text-dark">@Model.FullName</div>
+                <div class="profile-body">
+                    <div>
+                        <div class="profile-label">Повне ім’я:</div>
+                        <div class="profile-value">@Model.FullName</div>
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label fw-bold text-dark">Email:</label>
-                        <div class="form-control-plaintext text-dark">@Model.Email</div>
+                    <div>
+                        <div class="profile-label">Email:</div>
+                        <div class="profile-value">@Model.Email</div>
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label fw-bold text-dark">Роль:</label>
-                        <div class="form-control-plaintext text-dark">@Model.RoleName</div>
+                    <div>
+                        <div class="profile-label">Роль:</div>
+                        <div class="profile-value">@Model.RoleName</div>
                     </div>
                 </div>
-                <div class="card-footer text-center">
-                    <a asp-controller="Home" asp-action="Index" class="btn btn-outline-primary">
-                        На головну
+                <div class="profile-footer">
+                    <a asp-controller="Home" asp-action="Index" class="btn btn-primary-custom">
+                        ⬅️ На головну
                     </a>
                 </div>
             </div>

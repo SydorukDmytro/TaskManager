@@ -18,6 +18,7 @@ namespace TaskManager.dto
                 DueDate = task.DueDate,
                 ProjectId = task.ProjectId,
                 AssignedUserId = task.AssignedUserId,
+                CreatedByUserId = task.CreatedByUserId,
                 TagIds = task.TaskTags?.Select(tt => tt.TagId).ToList()
             };
         }
@@ -33,7 +34,8 @@ namespace TaskManager.dto
                 Priority = dto.Priority,
                 DueDate = dto.DueDate,
                 ProjectId = dto.ProjectId,
-                AssignedUserId = dto.AssignedUserId
+                AssignedUserId = dto.AssignedUserId,
+                CreatedByUserId = dto.CreatedByUserId
                 // TaskTags будуть заповнюватися окремо, якщо потрібно
             };
         }
@@ -48,7 +50,18 @@ namespace TaskManager.dto
                 Description = project.Description,
                 CreatedAt = project.CreatedAt,
                 CreatedByUserId = project.CreatedByUserId,
-                CreatedByUserName = project.Creator?.FullName
+                CreatedByUserName = project.Creator?.FullName,
+                Tasks = project.Tasks.Select(t => new TaskDto()
+                {
+                    Title = t.Title,
+                    Description = t.Description,
+                    Status = t.Status,
+                    Priority = t.Priority,
+                    DueDate = t.DueDate,
+                    ProjectId = t.ProjectId,
+                    AssignedUserId = t?.AssignedUserId,
+                    CreatedByUserId = t.CreatedByUserId
+                }).ToList()
             };
         }
 
@@ -60,7 +73,8 @@ namespace TaskManager.dto
                 Title = dto.Title,
                 Description = dto.Description,
                 CreatedAt = dto.CreatedAt,
-                CreatedByUserId = dto.CreatedByUserId
+                CreatedByUserId = dto.CreatedByUserId,
+                Tasks = dto.Tasks.Select(t => t.ToEntity()).ToList()
             };
         }
 
