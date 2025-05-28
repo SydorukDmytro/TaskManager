@@ -2,36 +2,40 @@
 @model ProjectDto
 
 @{
-    ViewData["Title"] = "Створити Проєкт";
+    ViewData["Title"] = "Створити проєкт";
 }
 
-<div class="container py-5 bg-dark text-light min-vh-100">
+<div class="container py-5">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <h2 class="mb-4">Створити новий проєкт</h2>
+            <h2 class="mb-4 text-center text-primary">Створити новий проєкт</h2>
 
-            <form asp-action="Create" method="post" class="bg-secondary p-4 rounded shadow">
+            <form asp-action="Create" method="post" class="p-4 bg-light rounded shadow-sm border">
                 <div class="mb-3">
-                    <label asp-for="Title" class="form-label">Заголовок:</label>
-                    <input asp-for="Title" class="form-control bg-dark text-light border-light" placeholder="Введіть заголок проєкту" />
-                    <span asp-validation-for="Title" class="text-danger"></span>
+                    <label asp-for="Title" class="form-label fw-semiboldtext-dark text-dark">Заголовок</label>
+                    <input asp-for="Title" class="form-control" placeholder="Введіть заголовок проєкту" />
+                    <span asp-validation-for="Title" class="text-danger small"></span>
                 </div>
 
                 <div class="mb-3">
-                    <label asp-for="Description" class="form-label">Опис:</label>
-                    <textarea asp-for="Description" class="form-control bg-dark text-light border-light" rows="4" placeholder="Введіть короткий опис проєкту"></textarea>
-                    <span asp-validation-for="Description" class="text-danger"></span>
+                    <label asp-for="Description" class="form-label fw-semibold text-dark">Опис</label>
+                    <textarea asp-for="Description" class="form-control" rows="4" placeholder="Введіть короткий опис проєкту"></textarea>
+                    <span asp-validation-for="Description" class="text-danger small"></span>
                 </div>
 
                 <div class="mb-3">
-                    <label asp-for="CreatedAt" class="form-label">Дата створення:</label>
-                    <input asp-for="CreatedAt" class="form-control bg-dark text-light border-light" type="datetime-local" />
-                    <span asp-validation-for="CreatedAt" class="text-danger"></span>
+                    <label asp-for="CreatedAt" class="form-label fw-semibold text-dark">Дата створення</label>
+                    <input asp-for="CreatedAt" type="datetime-local" class="form-control" />
+                    <span asp-validation-for="CreatedAt" class="text-danger small"></span>
                 </div>
 
-                <div class="d-flex justify-content-between">
-                    <a asp-action="Index" class="btn btn-outline-light">Повернутися до списку</a>
-                    <button type="submit" class="btn btn-primary">Створити</button>
+                <div class="d-flex justify-content-between align-items-center">
+                    <a asp-action="Index" class="btn btn-outline-secondary">
+                        ← Назад до списку
+                    </a>
+                    <button type="submit" class="btn btn-success">
+                        ✅ Створити проєкт
+                    </button>
                 </div>
             </form>
         </div>

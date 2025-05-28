@@ -5,20 +5,25 @@
     ViewData["Title"] = "Деталі користувача";
 }
 
-<h2>Деталі користувача</h2>
+<div class="d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+    <div class="card shadow p-4" style="max-width: 500px; width: 100%;">
+        <h2 class="text-center mb-4 text-dark">Деталі користувача</h2>
 
-<div class="mb-3">
-    <label class="form-label text-light">Повне ім'я:</label>
-    <p class="form-control-plaintext text-light">@Model.FullName</p>
-</div>
-<div class="mb-3">
-    <label class="form-label text-light">Email:</label>
-    <p class="form-control-plaintext text-light">@Model.Email</p>
-</div>
-<div class="mb-3">
-    <label class="form-label text-light">Роль:</label>
-    <p class="form-control-plaintext text-light">@Model.RoleName</p>
-</div>
+        <div class="mb-3">
+            <label class="form-label fw-medium text-dark">Повне ім'я:</label>
+            <p class="form-control-plaintext fs-5">@Model.FullName</p>
+        </div>
+        <div class="mb-3">
+            <label class="form-label fw-medium text-dark">Email:</label>
+            <p class="form-control-plaintext fs-5">@Model.Email</p>
+        </div>
+        <div class="mb-3">
+            <label class="form-label fw-medium text-dark">Роль:</label>
+            <p class="form-control-plaintext fs-5">@Model.RoleName</p>
+        </div>
 
-<a asp-action="Index" class="btn btn-secondary">Повернутися до списку</a>
-
+        <div class="text-center mt-4">
+            <a asp-action="Index" class="btn btn-outline-secondary">Повернутися до списку</a>
+        </div>
+    </div>
+</div>

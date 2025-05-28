@@ -8,18 +8,18 @@
     var isAdmin = User.IsInRole("Admin");
 }
 
-<div class="container py-5 bg-dark text-light min-vh-100">
+<div class="container py-5">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1 class="display-5">Проєкти</h1>
-        <a asp-action="Create" class="btn btn-primary">
+        <a asp-action="Create" class="btn btn-outline-primary btn-lg">
             + Створити проєкт
         </a>
     </div>
 
     @if (!Model.Any())
     {
-        <div class="alert alert-secondary text-center">
-            Не знайдено проєктів.
+        <div class="alert alert-light border text-center shadow-sm">
+            Жодного проєкту не знайдено. Почніть із створення нового!
         </div>
     }
     else
@@ -28,25 +28,25 @@
             @foreach (var project in Model)
             {
                 <div class="col">
-                    <div class="card bg-secondary text-white h-100">
+                    <div class="card shadow-sm h-100 border-0">
                         <div class="card-body d-flex flex-column">
-                            <h5 class="card-title">@project.Title</h5>
-                            <p class="card-text">@project.Description</p>
+                            <h5 class="card-title fw-bold text-primary">@project.Title</h5>
+                            <p class="card-text text-secondary">@project.Description</p>
                             <p class="card-text">
-                                <small class="text-light">Дата створення: @project.CreatedAt.ToString("yyyy-MM-dd")</small><br />
-                                <small class="text-light">Створив: @project.CreatedByUserName</small>
+                                <small class="text-muted">Дата створення: @project.CreatedAt.ToString("yyyy-MM-dd")</small><br />
+                                <small class="text-muted">Створив: @project.CreatedByUserName</small>
                             </p>
                             <div class="mt-auto">
-                                <a asp-action="Details" asp-route-id="@project.Id" class="btn btn-outline-light btn-sm me-2 mb-2">
+                                <a asp-action="Details" asp-route-id="@project.Id" class="btn btn-outline-secondary btn-sm me-2 mb-2">
                                     Деталі
                                 </a>
 
                                 @if (project.CreatedByUserId.ToString() == UserManager.GetUserId(User) || isAdmin)
                                 {
-                                    <a asp-action="Edit" asp-route-id="@project.Id" class="btn btn-warning btn-sm me-2 mb-2">
+                                    <a asp-action="Edit" asp-route-id="@project.Id" class="btn btn-outline-warning btn-sm me-2 mb-2">
                                         Змінити
                                     </a>
-                                    <a asp-action="Delete" asp-route-id="@project.Id" class="btn btn-danger btn-sm mb-2">
+                                    <a asp-action="Delete" asp-route-id="@project.Id" class="btn btn-outline-danger btn-sm mb-2">
                                         Видалити
                                     </a>
                                 }

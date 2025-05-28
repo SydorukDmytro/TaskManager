@@ -5,29 +5,43 @@
     ViewData["Title"] = "Редагувати проєкт";
 }
 
-<h2>Редагувати проєкт</h2>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <h2 class="mb-4 text-center text-warning">Редагувати проєкт</h2>
 
-<form asp-action="Edit" method="post">
-    <div asp-validation-summary="All" class="text-danger"></div>
-    <input type="hidden" asp-for="Id" />
-    <div class="mb-3">
-        <label asp-for="Title" class="form-label">Заголовок:</label>
-        <input asp-for="Title" class="form-control" />
-        <span asp-validation-for="Title" class="text-danger"></span>
+            <form asp-action="Edit" method="post" class="p-4 bg-light rounded shadow-sm border">
+                <div asp-validation-summary="All" class="text-danger small mb-3"></div>
+
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="CreatedAt" />
+                <input type="hidden" asp-for="CreatedByUserId" />
+                <input type="hidden" asp-for="CreatedByUserName" />
+
+                <div class="mb-3">
+                    <label asp-for="Title" class="form-label fw-semibold text-dark">Заголовок</label>
+                    <input asp-for="Title" class="form-control" placeholder="Введіть заголовок проєкту" />
+                    <span asp-validation-for="Title" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Description" class="form-label fw-semibold text-dark">Опис</label>
+                    <textarea asp-for="Description" class="form-control" rows="4" placeholder="Оновіть опис проєкту"></textarea>
+                    <span asp-validation-for="Description" class="text-danger small"></span>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center">
+                    <a asp-action="Index" class="btn btn-outline-secondary">
+                        ← Скасувати
+                    </a>
+                    <button type="submit" class="btn btn-success">
+                        💾 Зберегти зміни
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
-
-    <div class="mb-3">
-        <label asp-for="Description" class="form-label">Опис:</label>
-        <input asp-for="Description" class="form-control" />
-        <span asp-validation-for="Description" class="text-danger"></span>
-    </div>
-    <input type="hidden" asp-for="CreatedAt" />
-    <input type="hidden" asp-for="CreatedByUserId" />
-    <input type="hidden" asp-for="CreatedByUserName" />
-
-    <button type="submit" class="btn btn-success">Зберегти</button>
-    <a asp-action="Index" class="btn btn-secondary">Скасувати</a>
-</form>
+</div>
 
 @section Scripts {
     @{

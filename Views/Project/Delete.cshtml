@@ -1,33 +1,45 @@
 ﻿@using TaskManager.dto
 @model ProjectDto
+
 @{
     ViewData["Title"] = "Підтвердження видалення";
 }
 
 <div class="container py-5 bg-dark text-light min-vh-100">
-    <div class="card bg-secondary text-white shadow-lg">
-        <div class="card-body">
-            <h2 class="card-title text-danger mb-4">Видалити проєкт?</h2>
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card bg-danger bg-gradient text-white shadow-lg border-0">
+                <div class="card-body p-5">
 
-            <p class="fs-5"><strong>Назва:</strong> @Model.Title</p>
-            <p class="fs-5"><strong>Опис:</strong> @Model.Description</p>
-            <p><small class="text-light">Дата створення: @Model.CreatedAt.ToString("yyyy-MM-dd")</small></p>
-            <p><small class="text-light">Автор: @Model.CreatedByUserName</small></p>
+                    <h2 class="card-title text-center fw-bold mb-4">
+                        ⚠️ Ви дійсно хочете видалити проєкт?
+                    </h2>
 
-            <hr class="border-light" />
+                    <div class="mb-3">
+                        <p class="fs-5"><strong>🔖 Назва:</strong> @Model.Title</p>
+                        <p class="fs-5"><strong>📝 Опис:</strong> @Model.Description</p>
+                        <p class="mb-1"><small><strong>📅 Дата створення:</strong> @Model.CreatedAt.ToString("yyyy-MM-dd")</small></p>
+                        <p><small><strong>👤 Автор:</strong> @Model.CreatedByUserName</small></p>
+                    </div>
 
-            <form asp-action="DeleteConfirmed" method="post">
-                <input type="hidden" asp-for="Id" />
+                    <hr class="border-light" />
 
-                <div class="d-flex gap-3">
-                    <button type="submit" class="btn btn-danger">
-                        <i class="bi bi-trash"></i> Підтвердити видалення
-                    </button>
-                    <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-outline-light">
-                        Скасувати
-                    </a>
+                    <form asp-action="DeleteConfirmed" method="post">
+                        <input type="hidden" asp-for="Id" />
+
+                        <div class="d-flex justify-content-between align-items-center mt-4">
+                            <button type="submit" class="btn btn-light text-danger fw-semibold px-4">
+                                <i class="bi bi-trash-fill me-2"></i> Так, видалити
+                            </button>
+
+                            <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-outline-light px-4">
+                                🚫 Скасувати
+                            </a>
+                        </div>
+                    </form>
+
                 </div>
-            </form>
+            </div>
         </div>
     </div>
 </div>
