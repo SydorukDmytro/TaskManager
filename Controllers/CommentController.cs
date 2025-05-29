@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using TaskManager.dto;
+using TaskManager.Models;
 using TaskManager.Services;
 
 namespace TaskManager.Controllers
@@ -9,9 +11,11 @@ namespace TaskManager.Controllers
     public class CommentController : Controller
     {
         private readonly ICommentService _service;
+        private readonly UserManager<User> _userManager;
 
-        public CommentController(ICommentService service)
+        public CommentController(ICommentService service, UserManager<User> userManager)
         {
+            _userManager = userManager;
             _service = service;
         }
 
@@ -35,6 +39,40 @@ namespace TaskManager.Controllers
             await _service.CreateCommentAsync(dto);
             return RedirectToAction("Index", new { taskId = dto.TaskId });
         }
+
+        public async Task<IActionResult> CommentsPartial(int taskId)
+        {
+            var comments = await _service.GetCommentsByTaskAsync(taskId);
+            return PartialView("_CommentsPartial", comments);
+        }
+
+        // AJAX: Додаємо коментар і повертаємо оновлений список
+        [HttpPost]
+        public async Task<IActionResult> AddComment(CommentDto dto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest("Некоректні дані");
+
+            dto.AuthorId = int.Parse(_userManager.GetUserId(User));
+
+            await _service.CreateCommentAsync(dto);
+
+            var updatedComments = await _service.GetCommentsByTaskAsync(dto.TaskId);
+            return PartialView("_CommentsPartial", updatedComments);
+        }
+
+        //[HttpPost]
+        //[Authorize(Roles = "Admin")]
+        //public async Task<IActionResult> DeleteComment(int id)
+        //{
+        //    var comment = await _service.GetCommentByIdAsync(id);
+        //    if(comment == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    await _service.DeleteCommentAsync(id);
+        //}
     }
 
 }

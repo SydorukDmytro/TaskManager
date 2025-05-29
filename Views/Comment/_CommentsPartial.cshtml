@@ -1,0 +1,21 @@
+﻿@using TaskManager.dto
+@model IEnumerable<CommentDto>
+
+<div class="comments-list">
+    @foreach (var comment in Model.OrderByDescending(c => c.CreatedAt))
+    {
+        <div class="comment mb-2 p-2 bg-secondary rounded">
+            <div>
+                <strong>@comment.AuthorName</strong> <small class="text-muted">@comment.CreatedAt.ToString("g")</small>
+            </div>
+            <div>@comment.Content</div>
+            @if (User.IsInRole("admin"))
+            {
+                <form asp-action="DeleteComment" method="post" data-ajax="true" data-ajax-mode="replace" data-ajax-update="#commentsContainer">
+                    <input type="hidden" name="id" value="@comment.Id" />
+                    <button type="submit" class="btn btn-sm btn-danger">Видалити</button>
+                </form>
+            }
+        </div>
+    }
+</div>

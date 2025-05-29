@@ -1,0 +1,19 @@
+﻿@using TaskManager.dto
+@model IEnumerable<CommentDto>
+
+@if (Model == null || !Model.Any())
+{
+    <p class="text-muted">Коментарів немає</p>
+}
+else
+{
+    <ul class="list-unstyled">
+        @foreach (var comment in Model)
+        {
+            <li class="mb-2 border-bottom pb-2">
+                <strong>@comment.AuthorName</strong> <small class="text-muted">@comment.CreatedAt.ToString("dd.MM.yyyy HH:mm")</small>
+                <p>@comment.Content</p>
+            </li>
+        }
+    </ul>
+}

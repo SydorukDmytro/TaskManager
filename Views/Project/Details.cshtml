@@ -166,6 +166,16 @@
                                     Термін: @(task.DueDate?.ToString("dd.MM.yyyy") ?? "Не вказано")<br />
                                     Виконавець: @task.AssignedUserName
                                 </small>
+                                <div id="comments-container-@task.Id" class="task-comments mt-3">
+                                    @await Component.InvokeAsync("Comments", new { taskId = task.Id })
+                                </div>
+
+                                <!-- Форма для додавання коментарів -->
+                                <form id="comment-form-@task.Id" class="mt-2">
+                                    <input type="hidden" name="taskId" value="@task.Id" />
+                                    <textarea name="content" class="form-control mb-2" placeholder="Додати коментар..." required></textarea>
+                                    <button type="submit" class="btn btn-sm btn-primary">Додати</button>
+                                </form>
                             </div>
                         }
                     </div>
@@ -186,3 +196,29 @@
         }
     </section>
 </div>
+
+<script>
+    document.querySelectorAll('form[id^="comment-form-"]').forEach(form => {
+        form.addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const formData = new FormData(form);
+            const taskId = formData.get('taskId');
+
+            const response = await fetch('@Url.Action("AddComment", "Comment")', {
+                method: 'POST',
+                body: new URLSearchParams(formData),
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            });
+
+            if (response.ok) {
+                const html = await response.text();
+                document.getElementById('comments-container-' + taskId).innerHTML = html;
+                form.reset();
+            } else {
+                alert('Помилка при додаванні коментаря');
+            }
+        });
+    });
+</script>
+
