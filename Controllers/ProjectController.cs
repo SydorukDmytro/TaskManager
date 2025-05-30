@@ -23,13 +23,13 @@ namespace TaskManager.Controllers
         {
             var user = await userManager.GetUserAsync(User);
             var projects = await _service.GetAllProjectsAsync();
-            if(User.IsInRole("Admin"))
-            {
+            //if(User.IsInRole("Admin"))
+            //{
                 return View(projects);
-            }
+            //}
 
-            var filtered = projects.Where(p => p.CreatedByUserId == user.Id).ToList();
-            return View(filtered);
+            //var filtered = projects.Where(p => p.CreatedByUserId == user.Id).ToList();
+            //return View(filtered);
         }
 
         public async Task<IActionResult> Details(int id)
@@ -37,12 +37,12 @@ namespace TaskManager.Controllers
             var result = await _service.GetProjectByIdAsync(id);
             var user = await userManager.GetUserAsync(User);
 
-            if (result.CreatedByUserId == user.Id || User.IsInRole("Admin"))
-            {
-                return View(result);
-            }
+            //if (result.CreatedByUserId == user.Id || User.IsInRole("Admin"))
+            //{
+            return View(result);
+            //}
 
-            return NotFound();
+            //return NotFound();
         }
 
         public IActionResult Create() => View();

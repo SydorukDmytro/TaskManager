@@ -7,6 +7,21 @@
     <div class="card shadow p-4" style="width: 100%; max-width: 420px; border-radius: 12px;">
         <h2 class="text-center mb-4 text-dark" style="font-family: 'Poppins', sans-serif; font-weight: 800;">Реєстрація</h2>
 
+        @if (!ViewData.ModelState.IsValid && ViewData.ModelState.Values.Any(v => v.Errors.Count > 0))
+        {
+            <div class="alert alert-danger" role="alert">
+                <ul class="mb-0">
+                    @foreach (var modelState in ViewData.ModelState.Values)
+                    {
+                        foreach (var error in modelState.Errors)
+                        {
+                            <li>@error.ErrorMessage</li>
+                        }
+                    }
+                </ul>
+            </div>
+        }
+
         <form asp-action="Register" method="post" novalidate>
             <div class="mb-3">
                 <label asp-for="FullName" class="form-label text-dark"></label>
