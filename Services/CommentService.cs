@@ -31,5 +31,22 @@ namespace TaskManager.Services
             await _context.SaveChangesAsync();
             return comment.ToDto();
         }
+
+        public async Task<CommentDto> GetCommentByIdAsync(int id)
+        {
+            var comment = await _context.Comments.Include(c => c.Author)
+                .FirstOrDefaultAsync(c => c.CommentId == id);
+            return comment?.ToDto();
+        }
+
+        public async Task DeleteCommentAsync(int id)
+        {
+            var comment = await _context.Comments.FindAsync(id);
+            if (comment != null)
+            {
+                _context.Comments.Remove(comment);
+                await _context.SaveChangesAsync();
+            }
+        }
     }
 }

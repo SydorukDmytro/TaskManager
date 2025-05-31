@@ -9,13 +9,6 @@
                 <strong>@comment.AuthorName</strong> <small class="text-muted">@comment.CreatedAt.ToString("g")</small>
             </div>
             <div>@comment.Content</div>
-            @if (User.IsInRole("admin"))
-            {
-                <form asp-action="DeleteComment" method="post" data-ajax="true" data-ajax-mode="replace" data-ajax-update="#commentsContainer">
-                    <input type="hidden" name="id" value="@comment.Id" />
-                    <button type="submit" class="btn btn-sm btn-danger">Видалити</button>
-                </form>
-            }
         </div>
     }
 </div>

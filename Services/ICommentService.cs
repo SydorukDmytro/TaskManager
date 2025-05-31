@@ -6,5 +6,7 @@ namespace TaskManager.Services
     {
         Task<IEnumerable<CommentDto>> GetCommentsByTaskAsync(int taskId);
         Task<CommentDto> CreateCommentAsync(CommentDto dto);
+        Task<CommentDto> GetCommentByIdAsync(int id);
+        Task DeleteCommentAsync(int id);
     }
 }

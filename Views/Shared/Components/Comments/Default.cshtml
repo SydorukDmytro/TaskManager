@@ -10,9 +10,25 @@ else
     <ul class="list-unstyled">
         @foreach (var comment in Model)
         {
-            <li class="mb-2 border-bottom pb-2">
-                <strong>@comment.AuthorName</strong> <small class="text-muted">@comment.CreatedAt.ToString("dd.MM.yyyy HH:mm")</small>
-                <p>@comment.Content</p>
+            <li class="mb-2 border-bottom pb-2 position-relative">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <strong>@comment.AuthorName</strong>
+                        <small class="text-muted">@comment.CreatedAt.ToString("dd.MM.yyyy HH:mm")</small>
+                    </div>
+
+                    <!-- Форма видалення коментаря -->
+                    <form asp-controller="Comment"
+                          asp-action="Delete"
+                          asp-route-id="@comment.Id"
+                          method="post"
+                          onsubmit="return confirm('Ви впевнені, що хочете видалити цей коментар?')"
+                          class="d-inline">
+                        <button type="submit" class="btn btn-sm btn-outline-danger" title="Видалити коментар">🗑</button>
+                    </form>
+                </div>
+
+                <p class="mb-0">@comment.Content</p>
             </li>
         }
     </ul>

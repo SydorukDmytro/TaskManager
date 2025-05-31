@@ -12,9 +12,11 @@ namespace TaskManager.Controllers
     {
         private readonly ICommentService _service;
         private readonly UserManager<User> _userManager;
+        private readonly ITaskService _taskService;
 
-        public CommentController(ICommentService service, UserManager<User> userManager)
+        public CommentController(ICommentService service, UserManager<User> userManager, ITaskService taskService)
         {
+            _taskService = taskService;
             _userManager = userManager;
             _service = service;
         }
@@ -61,18 +63,18 @@ namespace TaskManager.Controllers
             return PartialView("_CommentsPartial", updatedComments);
         }
 
-        //[HttpPost]
-        //[Authorize(Roles = "Admin")]
-        //public async Task<IActionResult> DeleteComment(int id)
-        //{
-        //    var comment = await _service.GetCommentByIdAsync(id);
-        //    if(comment == null)
-        //    {
-        //        return NotFound();
-        //    }
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var comment = await _service.GetCommentByIdAsync(id);
+            if (comment == null)
+                return NotFound();
+            var task = await _taskService.GetTaskByIdAsync(comment.TaskId);
 
-        //    await _service.DeleteCommentAsync(id);
-        //}
+            await _service.DeleteCommentAsync(id);
+            return RedirectToAction("Details", "Project", new {id = task.ProjectId});
+        }
     }
 
 }
